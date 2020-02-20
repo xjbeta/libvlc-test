@@ -25,15 +25,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func p(_ sender: Any) {
-        guard let o = libvlc_media_player_get_nsobject(mediaPlayer) else { return }
-        
-        let v = Unmanaged<NSView>.fromOpaque(o).takeUnretainedValue()
-        
-        print(v)
-        
-        let hasVout = libvlc_media_player_has_vout(mediaPlayer)
-        
-        print(hasVout)
+        printInfo()
     }
     
     @IBOutlet weak var vView: NSView!
@@ -46,8 +38,8 @@ class ViewController: NSViewController {
         
         
 //        let pluginPath = "/Applications/livblc test.app/Contents/Frameworks/plugins"
-//        let pluginPath = "/Applications/VLC.app/Contents/Frameworks/plugins"
-        let pluginPath = "/Applications/VLC.app/Contents/MacOS/plugins"
+        let pluginPath = "/Applications/VLC.app/Contents/Frameworks/plugins"
+//        let pluginPath = "/Applications/VLC.app/Contents/MacOS/plugins"
         
         
         //        let pluginPath = Bundle.main.privateFrameworksPath!
@@ -62,18 +54,18 @@ class ViewController: NSViewController {
         //        }
         
         
-        //        let args = [String]()
+        let args = [String]()
         
         //        --codec
-        let args = [
-            "--no-color",
-            "--no-video-title-show",
-            "--verbose=4",
-            "--no-sout-keep",
-            "--vout=macosx",
-            "--text-renderer=freetype",
+//        let args = [
+//            "--no-color",
+//            "--no-video-title-show",
+//            "--verbose=4",
+//            "--no-sout-keep",
+//            "--vout=macosx",
+//            "--text-renderer=freetype",
 //            "--extraintf=macosx_dialog_provider",
-            "--audio-resampler=soxr"]
+//            "--audio-resampler=soxr"]
         let argv: [UnsafePointer<Int8>?] = args.map({ $0.withCString({ $0 }) })
         
                 let mrl = "file:///Users/xjbeta/Movies/Shelter.mkv"
@@ -100,9 +92,24 @@ class ViewController: NSViewController {
         
         libvlc_media_player_set_nsobject(mediaPlayer, vv)
         
-        
+        printInfo()
     }
 
+    func printInfo() {
+        let hasVout = libvlc_media_player_has_vout(mediaPlayer)
+
+        print(hasVout)
+        
+        
+        guard let o = libvlc_media_player_get_nsobject(mediaPlayer) else { return }
+        
+        let v = Unmanaged<NSView>.fromOpaque(o).takeUnretainedValue()
+        
+        print(v)
+        
+
+    }
+    
     override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
