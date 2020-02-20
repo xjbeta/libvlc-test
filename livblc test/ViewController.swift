@@ -45,8 +45,9 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         
-        let pluginPath = "/Applications/livblc test.app/Contents/Frameworks/plugins"
+//        let pluginPath = "/Applications/livblc test.app/Contents/Frameworks/plugins"
 //        let pluginPath = "/Applications/VLC.app/Contents/Frameworks/plugins"
+        let pluginPath = "/Applications/VLC.app/Contents/MacOS/plugins"
         
         
         //        let pluginPath = Bundle.main.privateFrameworksPath!
