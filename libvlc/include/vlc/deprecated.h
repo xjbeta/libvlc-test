@@ -2,6 +2,7 @@
  * deprecated.h:  libvlc deprecated API
  *****************************************************************************
  * Copyright (C) 1998-2008 VLC authors and VideoLAN
+ * $Id: bc73e493c22a65f43ce4b23bbd840b13d6cd3fb0 $
  *
  * Authors: Clément Stenac <zorglub@videolan.org>
  *          Jean-Paul Saman <jpsaman@videolan.org>
@@ -82,10 +83,11 @@ libvlc_media_parse_async( libvlc_media_t *p_md );
  * \see libvlc_MediaParsedChanged
  *
  * \param p_md media descriptor object
- * \retval true media object has been parsed
- * \retval false otherwise
+ * \return true if media object has been parsed otherwise it returns false
+ *
+ * \libvlc_return_bool
  */
-LIBVLC_DEPRECATED LIBVLC_API bool
+LIBVLC_DEPRECATED LIBVLC_API int
    libvlc_media_is_parsed( libvlc_media_t *p_md );
 
 /** @}*/
