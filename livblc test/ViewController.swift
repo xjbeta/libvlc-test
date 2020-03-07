@@ -38,8 +38,8 @@ class ViewController: NSViewController {
         
         
 //        let pluginPath = "/Applications/livblc test.app/Contents/Frameworks/plugins"
-//        let pluginPath = "/Applications/VLC.app/Contents/Frameworks/plugins"
-        let pluginPath = "/Applications/VLC.app/Contents/MacOS/plugins"
+        let pluginPath = "/Applications/VLC.app/Contents/Frameworks/plugins"
+//        let pluginPath = "/Applications/VLC.app/Contents/MacOS/plugins"
         
         
         //        let pluginPath = Bundle.main.privateFrameworksPath!
@@ -90,9 +90,87 @@ class ViewController: NSViewController {
         mediaPlayer = libvlc_media_player_new_from_media(mediaI)
         
         
-        libvlc_media_player_set_nsobject(mediaPlayer, vv)
+//        libvlc_media_player_set_nsobject(mediaPlayer, vv)
         
-        printInfo()
+        let s = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+
+        var reportOpaqueCB: ((UnsafeMutableRawPointer?, UInt32, UInt32) -> Void)? = { _, _, _ in
+            print("output_callbacks", "reportOpaqueCB")
+            
+            
+        }
+        
+        let setup: libvlc_video_output_setup_cb = { (opaque, cfg, info) -> Bool in
+            print("output_callbacks", "setup")
+            return true
+        }
+        
+        let cleanup: libvlc_video_output_cleanup_cb = { opaque in
+            print("output_callbacks", "cleanup")
+            
+
+        }
+        
+        let resize: libvlc_video_output_set_resize_cb = { (opaque, reportOpaqueCB, reportOpaque) in
+            print("output_callbacks", "resize")
+            
+            
+        }
+        
+        let updateOutput: libvlc_video_update_output_cb = { (opaque, cfg, output) -> Bool in
+            print("output_callbacks", "updateOutput")
+            
+            
+            return true
+        }
+        
+        let swap: libvlc_video_swap_cb = { (opaque) in
+            print("output_callbacks", "swap")
+            
+        }
+        
+        let makeCurrent: libvlc_video_makeCurrent_cb = { (opaque, enter) -> Bool in
+            print("output_callbacks", "makeCurrent")
+            
+            
+            return true
+        }
+        
+        let getProcAddress: libvlc_video_getProcAddress_cb = { (opaque, fctName) -> UnsafeMutableRawPointer? in
+            print("output_callbacks", "getProcAddress")
+            
+            
+            return nil
+        }
+        
+        let metadata: libvlc_video_frameMetadata_cb = { (opaque, type, metadata) in
+            print("output_callbacks", "metadata")
+            
+            
+        }
+        
+        let selectPlane: libvlc_video_output_select_plane_cb = { (opaque, plane) -> Bool in
+            
+            print("output_callbacks", "selectPlane")
+            
+            return true
+        }
+        
+        
+        
+        libvlc_video_set_output_callbacks(
+            mediaPlayer,
+            libvlc_video_engine_opengl,
+            setup,
+            cleanup,
+            resize,
+            updateOutput,
+            swap,
+            makeCurrent,
+            getProcAddress,
+            metadata,
+            selectPlane,
+            s)
     }
 
     func printInfo() {
@@ -135,9 +213,9 @@ class ViewController: NSViewController {
                     free(str)
                 }
             }
-            guard let s = str else { return }
+            guard let s = str?.toString(), s != "waiting decoder fifos to empty" else { return }
             
-            print("VLC LOG: \(s.toString())")
+            print("VLC LOG: \(s)")
             
         }, Unmanaged.passUnretained(self).toOpaque())
     }
